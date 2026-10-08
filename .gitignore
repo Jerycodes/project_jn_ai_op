@@ -1,0 +1,17 @@
+# .gitignore – was Git NICHT versionieren soll
+# Aufgabe 1.2 «DevOps Cloud», gemäss Slides «Projektaufgabe DevOps – Cloud» (Folie 4: echo ".venv/" >> .gitignore).
+# Erstellt am 2026-10-08 mit Unterstützung von Claude (Anthropic); geprüft: Jeremy Nathan.
+
+# Virtuelle Umgebung: gross und auf diesen Computer zugeschnitten.
+# render.com installiert die Pakete selbst aus requirements.txt.
+.venv/
+
+# Von Python automatisch erzeugter Bytecode-Cache – entsteht bei jedem Start neu.
+__pycache__/
+*.pyc
+
+# macOS-Systemdateien des Finders.
+.DS_Store
+
+# Persönliche Editor-Einstellungen (nicht Teil des Projekts).
+.vscode/

@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLM Requirements Calculator</title>
+  <meta name="description" content="Finde heraus, welche lokalen KI-Sprachmodelle auf deinem Computer laufen.">
+  <!--
+    index.html – Struktur der Web-Oberfläche (Schritt 3, Projektaufgabe 1.1 «DevOps lokal»)
+    Selbstständige Arbeit, Modul AI Operations (FHNW HSW, HS26) – Jeremy Nathan
+    Struktur (diese Datei) · Gestaltung (style.css) · Verhalten (app.js) sind bewusst getrennt.
+    Begriffe konsequent: Arbeitsspeicher (RAM) · Grafikspeicher (VRAM) · Festplatte (Speicherplatz für Dateien)
+    Ausgeliefert von Code/main.py unter http://127.0.0.1:8000/ ; die Berechnung macht die API (POST /empfehlung).
+    KI-Deklaration: Erstellt am 2026-10-07 mit Unterstützung von Claude (Anthropic; Claude Fable 5.1) auf Basis
+    einer früheren, von Jeremy Nathan geprüften Version; Vorgaben, Prüfung und Test: Jeremy Nathan.
+    Quelle: [Q7] Modul-Slides 1_01, Folie 14 «Beispiele Vorsemester» als Vorbild (Formular + Ergebnis).
+  -->
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='4' width='24' height='24' rx='6' fill='%230071e3'/%3E%3Crect x='11' y='11' width='10' height='10' rx='2' fill='white'/%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- ===== Kopfzeile ===================================================== -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="/">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="26" height="26"><rect x="4" y="4" width="24" height="24" rx="6" fill="currentColor"/><rect x="11" y="11" width="10" height="10" rx="2" fill="#fff"/></svg>
+        </span>
+        <span class="brand__name">LLM Requirements Calculator</span>
+      </a>
+      <nav class="topbar__nav">
+        <a href="#so-wird-gerechnet">So wird gerechnet</a>
+        <a href="/docs" target="_blank" rel="noopener">API</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===== Einleitung: eine Frage, ein Satz ============================ -->
+    <section class="hero container">
+      <h1>Welches KI-Modell läuft auf deinem Computer?</h1>
+      <p class="hero__lead">Ein paar Angaben zu deiner Hardware. Danach siehst du, welche Sprachmodelle passen – und welches die beste Wahl ist.</p>
+    </section>
+
+    <!-- ===== Eingabe: Schritt für Schritt ================================ -->
+    <section class="container container--narrow" aria-labelledby="eingabe-titel">
+      <div class="section-head">
+        <h2 id="eingabe-titel">Deine Hardware</h2>
+        <div class="presets" role="group" aria-label="Beispiel laden">
+          <span class="presets__label">Beispiel laden:</span>
+          <button type="button" class="chip" data-preset="macbook">MacBook Pro 36 GB</button>
+          <button type="button" class="chip" data-preset="gaming">Gaming-PC mit RTX 4070</button>
+          <button type="button" class="chip" data-preset="laptop">Laptop ohne Grafikkarte</button>
+        </div>
+      </div>
+
+      <form id="hardware-form" class="steps" novalidate>
+
+        <!-- Schritt 1: Betriebssystem -->
+        <fieldset class="step">
+          <legend class="step__head">
+            <span class="step__num" aria-hidden="true"></span>
+            <span class="step__title">Betriebssystem</span>
+            <button type="button" class="info-btn" aria-expanded="false" aria-controls="info-os" aria-label="Info zu Betriebssystem">i</button>
+          </legend>
+          <div class="segmented" role="radiogroup" aria-label="Betriebssystem">
+            <label class="segmented__option"><input type="radio" name="betriebssystem" value="macos" checked><span>macOS</span></label>
+            <label class="segmented__option"><input type="radio" name="betriebssystem" value="windows"><span>Windows</span></label>
+            <label class="segmented__option"><input type="radio" name="betriebssystem" value="linux"><span>Linux</span></label>
+          </div>
+          <div class="info" id="info-os" hidden>
+            <p><strong>macOS mit Apple Silicon (M1–M4):</strong> CPU und GPU teilen sich den Arbeitsspeicher. Es gibt keine separate Grafikkarte.</p>
+            <p><strong>Windows und Linux:</strong> Mit separater Grafikkarte rechnet die GPU im eigenen Grafikspeicher. Ohne Grafikkarte rechnet der Prozessor im Arbeitsspeicher – das ist deutlich langsamer.</p>
+          </div>
+        </fieldset>
+
+        <!-- Schritt 2: Arbeitsspeicher -->
+        <div class="step">
+          <div class="step__head">
+            <span class="step__num" aria-hidden="true"></span>
+            <label class="step__title" for="ram_gb">Arbeitsspeicher (RAM)</label>
+            <button type="button" class="info-btn" aria-expanded="false" aria-controls="info-ram" aria-label="Info zu Arbeitsspeicher">i</button>
+          </div>
+          <div class="input-unit">
+            <input type="number" id="ram_gb" name="ram_gb" min="1" max="1024" step="1" value="16" required inputmode="numeric">
+            <span class="input-unit__unit">GB</span>
+          </div>
+          <div class="info" id="info-ram" hidden>
+            <p>Der <strong>Arbeitsspeicher</strong> ist der schnelle Speicher, in dem ein Modell liegt, <em>während</em> es rechnet. Er ist nicht dasselbe wie die Festplatte, auf der die Modelldatei <em>dauerhaft</em> gespeichert ist.</p>
+            <p>Wo du den Wert findest: Mac → Apple-Menü → «Über diesen Mac» → Arbeitsspeicher. Windows → Einstellungen → System → Info → Installierter RAM.</p>
+          </div>
+        </div>
+
+        <!-- Schritt 3: Grafikkarte – bei macOS gesperrt mit Hinweis (Apple Silicon hat keine separate Grafikkarte) -->
+        <div class="step" id="step-gpu">
+          <div class="step__head">
+            <span class="step__num" aria-hidden="true"></span>
+            <span class="step__title" id="gpu-title">Grafikkarte</span>
+            <button type="button" class="info-btn" aria-expanded="false" aria-controls="info-gpu" aria-label="Info zu Grafikkarte">i</button>
+          </div>
+          <label class="toggle-row" for="gpu_toggle">
+            <span class="toggle-row__text">Separate Grafikkarte vorhanden</span>
+            <span class="switch">
+              <input type="checkbox" id="gpu_toggle" aria-describedby="gpu-title">
+              <span class="switch__track" aria-hidden="true"></span>
+            </span>
+          </label>
+          <p class="step__note is-hidden" id="gpu-note">Bei macOS nicht nötig: Apple Silicon hat keine separate Grafikkarte – die GPU nutzt den Arbeitsspeicher aus Schritt 2.</p>
+          <div class="subfield is-hidden" id="vram-wrapper">
+            <label class="subfield__label" for="vram_gb">Grafikspeicher (VRAM) der Grafikkarte</label>
+            <div class="input-unit">
+              <input type="number" id="vram_gb" name="vram_gb" min="1" max="256" step="1" value="8" inputmode="numeric">
+              <span class="input-unit__unit">GB</span>
+            </div>
+          </div>
+          <div class="info" id="info-gpu" hidden>
+            <p>Eine <strong>separate Grafikkarte</strong> (z. B. NVIDIA GeForce RTX, AMD Radeon) hat eigenen <strong>Grafikspeicher (VRAM)</strong> und rechnet KI-Modelle am schnellsten. Der Wert steht auf der Verpackung oder in den Systeminformationen (Windows: Task-Manager → Leistung → GPU).</p>
+            <p>Apple Silicon hat keine separate Grafikkarte – Schalter aus lassen.</p>
+          </div>
+        </div>
+
+        <!-- Schritt 4: Festplatte -->
+        <div class="step">
+          <div class="step__head">
+            <span class="step__num" aria-hidden="true"></span>
+            <label class="step__title" for="freier_speicher_gb">Freier Platz auf der Festplatte</label>
+            <button type="button" class="info-btn" aria-expanded="false" aria-controls="info-disk" aria-label="Info zu Festplatte">i</button>
+          </div>
+          <div class="input-unit">
+            <input type="number" id="freier_speicher_gb" name="freier_speicher_gb" min="0" max="100000" step="1" value="100" required inputmode="numeric">
+            <span class="input-unit__unit">GB</span>
+          </div>
+          <div class="info" id="info-disk" hidden>
+            <p>Auf der <strong>Festplatte</strong> (SSD) wird die Modelldatei dauerhaft gespeichert – je nach Modell 1 bis 40 GB. Wir prüfen, ob der freie Platz für die gewünschte Anzahl Modelle reicht.</p>
+            <p>Wo du den Wert findest: Mac → «Über diesen Mac» → Speicher. Windows → Explorer → «Dieser PC».</p>
+          </div>
+        </div>
+
+        <!-- Schritt 5: Details (optional, zugeklappt) -->
+        <details class="step step--details">
+          <summary class="step__head">
+            <span class="step__num" aria-hidden="true"></span>
+            <span class="step__title">Details <span class="step__optional">optional</span></span>
+            <span class="step__chevron" aria-hidden="true"></span>
+          </summary>
+
+          <div class="details-grid">
+            <div class="subfield">
+              <div class="subfield__head">
+                <label class="subfield__label" for="anzahl_modelle">Modelle auf der Festplatte</label>
+                <button type="button" class="info-btn info-btn--small" aria-expanded="false" aria-controls="info-anzahl" aria-label="Info zu Anzahl Modelle">i</button>
+              </div>
+              <div class="input-unit">
+                <input type="number" id="anzahl_modelle" name="anzahl_modelle" min="1" max="20" step="1" value="1" inputmode="numeric">
+                <span class="input-unit__unit">Stück</span>
+              </div>
+              <div class="info" id="info-anzahl" hidden><p>Wie viele Modelle du gleichzeitig auf der Festplatte behalten möchtest. Beeinflusst nur die Prüfung des Festplattenplatzes.</p></div>
+            </div>
+
+            <div class="subfield">
+              <div class="subfield__head">
+                <label class="subfield__label" for="quantisierung">Quantisierung</label>
+                <button type="button" class="info-btn info-btn--small" aria-expanded="false" aria-controls="info-quant" aria-label="Info zu Quantisierung">i</button>
+              </div>
+              <select id="quantisierung" name="quantisierung">
+                <option value="Q4_K_M" selected>Q4_K_M – empfohlen (klein, gute Qualität)</option>
+                <option value="Q5_K_M">Q5_K_M – etwas grösser, etwas besser</option>
+                <option value="Q6_K">Q6_K – nahe Original</option>
+                <option value="Q8_0">Q8_0 – praktisch verlustfrei, doppelt so gross</option>
+                <option value="F16">F16 – unkomprimiert</option>
+              </select>
+              <div class="info" id="info-quant" hidden><p>Quantisierung komprimiert ein Modell: Es braucht weniger Arbeitsspeicher und weniger Platz auf der Festplatte, verliert dafür minimal an Qualität. Q4_K_M ist der übliche Kompromiss.</p></div>
+            </div>
+
+            <div class="subfield">
+              <div class="subfield__head">
+                <label class="subfield__label" for="kontextfenster">Kontextfenster</label>
+                <button type="button" class="info-btn info-btn--small" aria-expanded="false" aria-controls="info-ctx" aria-label="Info zu Kontextfenster">i</button>
+              </div>
+              <select id="kontextfenster" name="kontextfenster">
+                <option value="2048">2'048 Tokens</option>
+                <option value="4096">4'096 Tokens</option>
+                <option value="8192" selected>8'192 Tokens – Standard</option>
+                <option value="16384">16'384 Tokens</option>
+                <option value="32768">32'768 Tokens</option>
+                <option value="65536">65'536 Tokens</option>
+                <option value="131072">131'072 Tokens</option>
+              </select>
+              <div class="info" id="info-ctx" hidden><p>Wie viel Text das Modell gleichzeitig «im Kopf» behält (ca. 4 Zeichen pro Token). Ein grösseres Kontextfenster braucht mehr Arbeitsspeicher – nicht mehr Festplatte.</p></div>
+            </div>
+          </div>
+        </details>
+
+        <div class="submit-row">
+          <button type="submit" class="btn btn--primary" id="submit-btn">
+            <span class="btn__label">Passende Modelle anzeigen</span>
+            <span class="btn__spinner" aria-hidden="true"></span>
+          </button>
+          <p class="form-error is-hidden" id="form-error" role="alert"></p>
+        </div>
+      </form>
+    </section>
+
+    <!-- ===== Ergebnis (erscheint nach der Berechnung) ==================== -->
+    <section class="container container--results is-hidden" id="results" aria-live="polite">
+      <div class="section-head section-head--results">
+        <h2>Dein Ergebnis</h2>
+        <p class="section-head__sub" id="results-sub"></p>
+      </div>
+      <div id="results-content"></div>
+    </section>
+
+    <!-- ===== Erklärung (zugeklappt, für Interessierte) =================== -->
+    <section class="container container--narrow explain" id="so-wird-gerechnet">
+      <h2>So wird gerechnet</h2>
+      <details class="faq">
+        <summary>Arbeitsspeicher, Grafikspeicher, Festplatte – was ist was?</summary>
+        <p><strong>Arbeitsspeicher (RAM)</strong> und <strong>Grafikspeicher (VRAM)</strong> sind schnelle Speicher, in denen ein Modell liegt, während es rechnet. Das Modell muss dort ganz hineinpassen. Die <strong>Festplatte</strong> (SSD) speichert die Modelldatei dauerhaft – sie bestimmt nur, wie viele Modelle du aufbewahren kannst.</p>
+      </details>
+      <details class="faq">
+        <summary>Wie viel Arbeitsspeicher ist für ein Modell nutzbar?</summary>
+        <p>Mit separater Grafikkarte zählt der Grafikspeicher (minus 0.5 GB für den Treiber). Auf Apple Silicon gibt macOS der GPU rund zwei Drittel bis drei Viertel des Arbeitsspeichers frei. Ohne Grafikkarte rechnet der Prozessor – davon sind etwa 75 % des Arbeitsspeichers nutzbar.</p>
+      </details>
+      <details class="faq">
+        <summary>Wie viel Arbeitsspeicher braucht ein Modell?</summary>
+        <p><strong>Modellgewichte</strong> = Parameter × Bits pro Gewicht ÷ 8 – das ist zugleich die Dateigrösse auf der Festplatte. Dazu kommt der <strong>KV-Cache</strong> für das Kontextfenster (abhängig von der Modellarchitektur) und rund <strong>0.75 GB Reserve</strong> für Rechenpuffer.</p>
+      </details>
+      <details class="faq">
+        <summary>Was bedeuten «optimal», «passt» und «knapp»?</summary>
+        <p>Belegt ein Modell höchstens 70 % des nutzbaren Arbeitsspeichers, ist es <strong>optimal</strong> – es bleibt Reserve für längere Texte und andere Programme. Bis 90 % <strong>passt</strong> es, bis 100 % ist es <strong>knapp</strong>, darüber <strong>zu gross</strong>. Die beste Wahl ist das grösste Modell, das optimal oder passend ist und auf die Festplatte passt.</p>
+      </details>
+      <p class="explain__note">Richtwerte auf Basis gängiger GGUF-Quantisierungen (llama.cpp). Der reale Bedarf hängt von der verwendeten Software ab (Ollama, LM Studio, llama.cpp).</p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span>Selbstständige Arbeit, Modul AI Operations · FHNW Hochschule für Wirtschaft · HS26 · Jeremy Nathan</span>
+      <a href="/docs" target="_blank" rel="noopener">API-Dokumentation</a>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# requirements.txt – Abhängigkeiten des LLM Requirements Calculators
+#
+# Installation (im Projektordner, venv aktiviert):   pip install -r requirements.txt
+# Das Programm selbst (Code/katalog.py, rechner.py, cli.py) braucht keine Pakete.
+# Die drei Pakete unten braucht nur die API (Code/main.py), ab Aufgabe 1.1 Schritt 2.
+#
+# Abweichung vom Beispiel des Dozenten (fastapi==0.115.0, uvicorn[standard]==0.30.6, pydantic==2.9.2):
+# Dieses Projekt läuft mit Python 3.14. Für pydantic 2.9.2 gibt es keine vorkompilierten Pakete
+# (Wheels) für 3.14, die Installation würde scheitern. Darum aktuelle Versionen (Stand 2026-10-07),
+# die alle Wheels für Python 3.14 auf macOS (Apple Silicon) liefern. Konzepte und Code sind identisch.
+#
+# Versionen sind fix («==»), damit die Installation reproduzierbar ist – lokal und später auf render.com.
+
+fastapi==0.142.3            # Web-Framework: Endpunkte, Validierung, automatische Doku unter /docs
+uvicorn[standard]==0.54.0   # ASGI-Server, führt die FastAPI-App aus ([standard] = schnellere Zusatzpakete)
+pydantic==2.13.5            # Datenprüfung für Eingabe- und Ausgabe-Schemas (wird von FastAPI genutzt)
