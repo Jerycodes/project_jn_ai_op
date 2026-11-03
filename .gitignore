@@ -15,3 +15,13 @@ __pycache__/
 
 # Persönliche Editor-Einstellungen (nicht Teil des Projekts).
 .vscode/
+
+# Lokale Exporte und Notizen (nicht Teil des Programms)
+README.html
+docs/*.docx
+
+# Word-Sperrdateien (entstehen, solange ein Dokument offen ist)
+~$*
+
+# R-Verlaufsdatei (versehentlich entstanden)
+.Rhistory
