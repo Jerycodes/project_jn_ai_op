@@ -62,3 +62,32 @@ def test_startseite():
     antwort = client.get("/")
     assert antwort.status_code == 200
     assert "<html" in antwort.text.lower()
+
+# --- Feature ram-grenze: Arbeitsspeicher bis 4096 GB, darüber 422 ----------------
+
+def test_ram_ueber_1tb_erlaubt():
+    """Grosse Workstations und Server: 2048 GB werden angenommen (vorher Grenze 1024 in der Oberfläche)."""
+    antwort = client.post("/empfehlung", json={**BEISPIEL, "ram_gb": 2048})
+    assert antwort.status_code == 200
+    assert antwort.json()["beste_wahl"] == "Llama 3.3 70B"
+
+
+def test_ram_ueber_obergrenze_abgelehnt():
+    """Mehr als 4096 GB ist kein realistischer Wert: 422, Fehlertext nennt ram_gb."""
+    antwort = client.post("/empfehlung", json={**BEISPIEL, "ram_gb": 5000})
+    assert antwort.status_code == 422
+    assert antwort.json()["detail"][0]["loc"] == ["body", "ram_gb"]
+
+
+def test_vram_ueber_obergrenze_abgelehnt():
+    """Grafikspeicher über 512 GB ist kein realistischer Wert für eine Karte: 422."""
+    antwort = client.post("/empfehlung", json={**BEISPIEL, "betriebssystem": "linux", "vram_gb": 600})
+    assert antwort.status_code == 422
+    assert antwort.json()["detail"][0]["loc"] == ["body", "vram_gb"]
+
+
+def test_vram_grosse_karte_erlaubt():
+    """288 GB (grosse Rechenzentrums-Karte) werden angenommen, Speichertyp vram."""
+    antwort = client.post("/empfehlung", json={**BEISPIEL, "betriebssystem": "linux", "vram_gb": 288})
+    assert antwort.status_code == 200
+    assert antwort.json()["speichertyp"] == "vram"

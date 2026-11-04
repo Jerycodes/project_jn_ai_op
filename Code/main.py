@@ -71,9 +71,9 @@ Quantisierung = Literal["Q4_K_M", "Q5_K_M", "Q6_K", "Q8_0", "F16"]   # muss zu Q
 class HardwareAnfrage(BaseModel):
     """Hardware-Angaben des Benutzers. Field(...) = Pflichtfeld; gt/ge/le = erlaubter Bereich."""
 
-    ram_gb: float = Field(..., gt=0, description="Arbeitsspeicher (RAM) in GB – nicht die Festplatte")
+    ram_gb: float = Field(..., gt=0, le=4096, description="Arbeitsspeicher (RAM) in GB, höchstens 4096 (grosse Server) – nicht die Festplatte")
     betriebssystem: Betriebssystem = Field(..., description="macos, windows oder linux")
-    vram_gb: float | None = Field(None, ge=0, description="Grafikspeicher (VRAM) einer separaten Grafikkarte in GB; leer bei macOS oder ohne Grafikkarte")
+    vram_gb: float | None = Field(None, ge=0, le=512, description="Grafikspeicher (VRAM) einer separaten Grafikkarte in GB, höchstens 512; leer bei macOS oder ohne Grafikkarte")
     freier_speicher_gb: float = Field(..., ge=0, description="Freier Platz auf der Festplatte in GB")
     anzahl_modelle: int = Field(1, ge=1, le=20, description="Wie viele Modelle gleichzeitig auf der Festplatte liegen sollen")
     quantisierung: Quantisierung = Field("Q4_K_M", description="Quantisierungsformat (GGUF)")
