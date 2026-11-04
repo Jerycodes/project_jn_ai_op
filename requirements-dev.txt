@@ -1,0 +1,12 @@
+# requirements-dev.txt – Werkzeuge für Entwicklung und Tests (Aufgabe 1.2, CI)
+# Erstellt am 2026-11-04 mit Unterstützung von Claude (Anthropic); geprüft: Jeremy Nathan.
+#
+# Installation (im Projektordner, venv aktiviert):   pip install -r requirements-dev.txt
+# Wird lokal und in der GitHub-Actions-Pipeline verwendet, NICHT auf render:
+# render installiert nur requirements.txt, damit in Produktion nur läuft, was der Betrieb braucht.
+#
+# Versionen fix («==»), wie in requirements.txt (Stand 2026-11-04).
+
+-r requirements.txt     # zuerst alles aus der Betriebs-Datei (fastapi, uvicorn, pydantic)
+pytest==9.2.0           # Test-Runner: findet test_*.py, führt test_*-Funktionen aus, meldet bestanden/gescheitert
+httpx==0.28.1           # HTTP-Client, den FastAPIs TestClient braucht, um die API ohne laufenden Server aufzurufen
