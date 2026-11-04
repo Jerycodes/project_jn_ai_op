@@ -1,0 +1,29 @@
+# .github/workflows/tests.yml – Continuous Integration: Tests bei jedem Push und Pull Request
+# Erstellt am 2026-11-04 mit Unterstützung von Claude (Anthropic); geprüft: Jeremy Nathan.
+# Quelle: GitHub Docs, «Building and testing Python» (abgerufen am 2026-11-04):
+#         https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python
+
+name: Tests
+
+on:
+  push:            # bei jedem Push auf irgendeinen Zweig
+  pull_request:    # und bei jedem Pull Request
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest    # GitHub stellt einen frischen Linux-Rechner bereit
+
+    steps:
+      - name: Code holen
+        uses: actions/checkout@v6
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"    # dieselbe Version wie lokal und auf render
+
+      - name: Pakete installieren
+        run: pip install -r requirements-dev.txt
+
+      - name: Tests ausführen
+        run: pytest
