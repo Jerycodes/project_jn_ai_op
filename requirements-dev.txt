@@ -9,4 +9,4 @@
 
 -r requirements.txt     # zuerst alles aus der Betriebs-Datei (fastapi, uvicorn, pydantic)
 pytest==9.2.0           # Test-Runner: findet test_*.py, führt test_*-Funktionen aus, meldet bestanden/gescheitert
-httpx==0.28.1           # HTTP-Client, den FastAPIs TestClient braucht, um die API ohne laufenden Server aufzurufen
+httpx2==2.16.0          # HTTP-Client, den FastAPIs TestClient braucht, um die API ohne laufenden Server aufzurufen
