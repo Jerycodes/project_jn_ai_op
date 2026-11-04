@@ -123,7 +123,7 @@ app = FastAPI(
     title="LLM Requirements Calculator",
     description="Berechnet aus Hardware-Angaben, welche lokalen Sprachmodelle (LLMs) passen. "
                 "Selbstständige Arbeit, Modul AI Operations, FHNW HS26.",
-    version="1.1.0",
+    version="1.1.1",
 )
 
 
