@@ -10,7 +10,7 @@ und zusätzlich in `docs/hilfsmittel.md`.
 | Kapitel | Inhalt laut Vorlage | Dateiname | Status |
 |---|---|---|---|
 | 1 DevOps lokal | Aufruf der API und Antwort (relevante Stellen mit Mauszeiger zeigen) | `01_devops_lokal.mp4` | offen |
-| 2 DevOps Cloud | GitHub-Repository, Aufruf der API auf render.com und Antwort | `02_devops_cloud.mp4` | offen |
+| 2 DevOps Cloud | GitHub-Repository (Branches, Pipeline), Aufruf der API auf render.com und Antwort, Logs | `02_devops_cloud.mp4` | offen |
 | 3 AzureML | deploytes Modell (Endpoint), Beispielaufruf mit Ergebnissen im Notebook | `03_azureml.mp4` | offen |
 | 4 Guardrail | Prompt in Jan.AI, Reaktion der Guardrail, Antwort, Usage/Kosten in LiteLLM | `04_guardrail.mp4` | offen |
 | 5 Supply Chain | zu prüfende Files/Codezeilen, Durchführung der Prüfung | `05_supply_chain.mp4` | offen |
@@ -54,7 +54,25 @@ und zusätzlich in `docs/hilfsmittel.md`.
   - [ ] Screenvideo `01_devops_lokal.mp4` aufnehmen (Terminal-Start, `/docs` POST /empfehlung, Antwort, Oberfläche)
   - [ ] Anhang 1 ausdrucken/unterschreiben (Ort, Datum, Unterschrift)
   - [ ] Reflexionsfolien bis 13.10. (MLOps-Prinzipien in den DevOps-Aufgaben; Technical Debt)
-  - [ ] Aufgabe 1.2: Git, `.gitignore`, GitHub, render.com
+  - [x] Aufgabe 1.2: Git, `.gitignore`, GitHub, render.com (08.10.)
+
+### 2026-10-08 – Aufgabe 1.2, Grundaufbau
+- **Eigenleistung:** `git init`, `.gitignore`, erster Commit (14 Dateien), Repository `Jerycodes/project_jn_ai_op` auf GitHub, `git push -u origin main`; `.python-version` (3.14) für render; Web Service `llm-requirements-calculator` auf render.com (Frankfurt, Free, Build `pip install -r requirements.txt`, Start `uvicorn Code.main:app --host 0.0.0.0 --port $PORT`), erster Deploy live um 10:22.
+- **KI-Beitrag (Claude):** Erklärung der Folien-Befehle und der render-Einstellungen.
+
+### 2026-11-03 – Bericht Kapitel 1, Grundaufbau 1.2 geprüft
+- **Eigenleistung:** Bericht auf der Vorlage neu aufgesetzt (`ai_operations_bericht.docx`); Git-Stand, render-Einstellungen, Events und Logs geprüft; API auf render unter `/docs` aufgerufen; Branch-Modell nach Gitflow und automatische Tests festgelegt.
+- **KI-Beitrag (Claude):** Entwürfe für Kapitel 1, Abbildungen und Anhänge 5/6; Erklärungen zu Git, render und Logs.
+
+### 2026-11-04 – Aufgabe 1.2: Tests, Pipeline, Features, Release, Hotfix
+- **Eigenleistung:** Zweige `develop`, `feature/tests-und-ci` (5 Commits, Pull Request #1), `feature/ram-grenze` (Test zuerst: 1 failed, nach der Codeänderung 17 passed), `release/1.1.0` (Tags `v1.0.0`, `v1.1.0`), `hotfix/1.1.1` (Tag `v1.1.1`); Merges, Push und Aufräumen der Zweige; Prüfung auf `develop` mit uvicorn; Kontrolle der Pipeline-Läufe auf GitHub und der Deploys und Logs auf render; Health Check Path `/health`.
+- **KI-Beitrag (Claude):** Entwürfe für `tests/`, `pytest.ini`, `requirements-dev.txt`, `.github/workflows/tests.yml`, `CHANGELOG.md`, README-Abschnitt 1.2, `hilfsmittel.md`, `quellen.md` (Q9–Q14); Erklärbild zu Mac und GitHub.
+- **Beobachtungen:** Störung bei GitHub (Actions, Pull Requests) verzögerte Lauf 3 und den Auto-Deploy; `httpx` durch `httpx2` ersetzt (Hinweis von Starlette); vor dem Health Check prüfte render `HEAD /` (405).
+- **Offen:**
+  - [ ] Screenvideos `01_devops_lokal.mp4` und `02_devops_cloud.mp4` aufnehmen
+  - [ ] Bericht Kapitel 2 (max. 1 A4) mit Abbildung und Anhang-Tabelle; Anhang 5 Tabelle 1: Grenzen RAM ≤ 4096 GB, VRAM ≤ 512 GB
+  - [ ] Anhang 2 im Bericht mit `docs/hilfsmittel.md` abgleichen; Literaturverzeichnis um Q9–Q14 ergänzen
+  - [ ] Doku-Commits auf `develop`; vor der Abgabe Release `develop → main`
 
 ---
 

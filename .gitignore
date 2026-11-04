@@ -28,3 +28,5 @@ docs/*.docx
 
 # Zwischenspeicher von pytest (entsteht bei jedem Testlauf neu)
 .pytest_cache/
+# Aufgabe 2 Azure ML: Daten und Notebook mit Endpoint-Schlüssel bleiben lokal
+azureml/

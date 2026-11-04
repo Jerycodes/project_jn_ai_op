@@ -1,10 +1,10 @@
 # Quellenverzeichnis – LLM Requirements Calculator
 
 Alle externen Quellen des Projekts, gebündelt nach Herkunft, mit Link, Abrufdatum und der Stelle,
-an der sie verwendet werden. Die Nummern Q1–Q8 stehen so auch in den Kopfkommentaren der Code-Dateien.
-Abschnitt 4 enthält die fertigen Einträge im APA-7-Format für das Literaturverzeichnis des Berichts.
+an der sie verwendet werden. Die Nummern Q1–Q14 stehen so auch in den Kopfkommentaren der Code- und Testdateien.
+Abschnitt 7 enthält die fertigen Einträge im APA-7-Format für das Literaturverzeichnis des Berichts.
 
-Stand: 2026-10-07 · alle Links an diesem Tag geprüft.
+Stand: 2026-11-04 (Q1–Q8 am 2026-10-07 geprüft, Q9–Q14 am 2026-11-04).
 
 ---
 
@@ -16,7 +16,9 @@ Stand: 2026-10-07 · alle Links an diesem Tag geprüft.
 | Q7 | Beispielcode des Dozenten (3_1 DevOps – Umsetzung – Beispiel: `Code/main.py`, `primzahl-info.ipynb`, `test_API.ipynb`, `requirements.txt`) | Vorlage für Struktur und Stil: Pydantic-Schemas, `@app.post`, `response_model`, Programm mit `input()`/`print()` | `main.py`, `cli.py` |
 | Q7 | Slides «1.2 DevOps» (2_01.pdf), Folien 6–9 | DevOps-Phasen Plan bis Monitor – Einordnung der Umsetzung im Bericht | Bericht Kapitel 1 |
 | Q7 | Slides «1.1 Software-Entwicklungsprozess» (1_01.pdf), Folie 14 | Ziel der Arbeit (Programm mit Input/Output, «nach aussen» über API); Beispiele aus dem Vorsemester als Vorbild für die Web-Oberfläche | `static/`, Erklärungsdokument, Bericht Kapitel 1 |
-| Q7 | Slides «Projektaufgabe DevOps – Cloud» (2_1.pdf), Folien 3–9 | Ausblick Aufgabe 1.2: Git, `.gitignore`, GitHub, render.com, Startbefehl mit `--host 0.0.0.0 --port $PORT` | Erklärungsdokument; später Bericht Kapitel 2 |
+| Q7 | Slides «Projektaufgabe DevOps – Cloud» (2_1.pdf), Folien 3–9 | Aufgabe 1.2: Git, `.gitignore`, GitHub, render.com, Startbefehl mit `--host 0.0.0.0 --port $PORT`, Code anpassen und deployen | `.gitignore`, render-Einstellungen; Bericht Kapitel 2 |
+| Q7 | Slides «CI/CD und GIT» (1_02.pdf): Folie 10 (CI = Commits, automatisierte Builds, Unit-Tests), Folie 20 «Branch» (Gitflow), Folie 33 (Branch-Befehle), Folien 37–38 (Ziel «echtes CI/CD-Setup», Vergleich lokal/Cloud) | Branch-Modell, Tests in der Pipeline, Einordnung in Kapitel 2 | `.github/workflows/tests.yml`, README; Bericht Kapitel 2 |
+| Q7 | Slides «03 AI Ops», Folie 3 «Erneute Reflexion» | Lückentabelle der lokalen Umsetzung (automatisierte Tests, Versionierung, Verfügbarkeit, Monitoring) als Prüfliste für Aufgabe 1.2 | Bericht Kapitel 1 und 2 |
 | – | Merkblatt HSW-FHNW «Einsatz von KI-Tools» | Regeln für KI-Einsatz, Hilfsmittelverzeichnis (Anhang 2), Eigenständigkeitserklärung | `docs/hilfsmittel.md`, Bericht |
 | – | Vorlage für die Projektarbeit (5_Vorlage für die Projektarbeit.docx) | Struktur und Seitenlimits des Berichts | Bericht |
 
@@ -60,7 +62,19 @@ Modelle im Katalog (Werte am 2026-10-07 abgerufen; die Llama-Seiten verlangen ei
 
 Pydantic und uvicorn werden in diesem Tutorial mitbehandelt und darum nicht separat zitiert.
 
-## 5. Eigene Annahmen (keine Quelle, im Code als solche markiert)
+## 5. Aufgabe 1.2: Tests, Pipeline, Git und render.com
+
+| Nr. | Quelle | Link | Verwendet für | Wo |
+|---|---|---|---|---|
+| Q9 | FastAPI-Dokumentation, Tutorial «Testing» (TestClient) | https://fastapi.tiangolo.com/tutorial/testing/ | API ohne laufenden Server testen (`client.get`, `client.post`, Statuscodes) | `tests/test_api.py` |
+| Q10 | pytest-Dokumentation «Get Started» | https://docs.pytest.org/en/stable/getting-started.html | Testerkennung (`test_*.py`, Funktionen `test_*`), `assert`, Aufruf `pytest` | `tests/`, `pytest.ini` |
+| Q11 | GitHub Docs «Building and testing Python» | https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python | Aufbau der Workflow-Datei (`on`, `jobs`, `steps`, `actions/checkout`, `actions/setup-python`, `pytest`) | `.github/workflows/tests.yml` |
+| Q12 | Render Docs «Setting Your Python Version» | https://render.com/docs/python-version | Reihenfolge `PYTHON_VERSION` → `.python-version` → Standardversion (abhängig vom Erstellungsdatum des Dienstes) | `.python-version`; Bericht Kapitel 2 |
+| Q13 | Render Docs «Health Checks» | https://render.com/docs/health-checks | Health Check Path: GET-Anfrage an einen eigenen Pfad vor dem Umschalten auf die neue Instanz | render-Einstellung `/health`; Bericht Kapitel 2 |
+| Q14 | Driessen, V. (2010): «A successful Git branching model» | https://nvie.com/posts/a-successful-git-branching-model/ | Ursprung des Gitflow-Modells (main, develop, feature, release, hotfix), das die Folie «Branch» zeigt | README; Bericht Kapitel 2 |
+| – | Starlette Release Notes (Version 1.2.0: «Support httpx2 in the test client») | https://starlette.dev/release-notes/ | Begründung für `httpx2` statt `httpx` in `requirements-dev.txt` | `requirements-dev.txt` |
+
+## 6. Eigene Annahmen (keine Quelle, im Code als solche markiert)
 
 | Wert | Bedeutung | Wo |
 |---|---|---|
@@ -72,11 +86,9 @@ Pydantic und uvicorn werden in diesem Tutorial mitbehandelt und darum nicht sepa
 
 ---
 
-## 6. Literaturverzeichnis nach APA 7 (zum Übernehmen in den Bericht)
+## 7. Literaturverzeichnis nach APA 7 (zum Übernehmen in den Bericht)
 
-Kurzbelege im Text: (Brun, 2026e, Folie 6) · (Kawrakow, 2023) · (ggml-org, 2026) · (dr3murr, 2023) · (Schmid et al., 2024) · (Meta, 2024a) · (Qwen Team, 2025c) · (Microsoft, 2024) · (huggyllama, 2023) · (Ramírez, o. D.) · (Anthropic, 2026)
-
-Anthropic. (2026). *Claude Fable 5.1* [Grosses Sprachmodell]. https://claude.ai
+Kurzbelege im Text: (Kawrakow, 2023) · (ggml-org, 2026) · (dr3murr, 2023) · (Schmid et al., 2024) · (Meta, 2024a) · (Qwen Team, 2025c) · (Microsoft, 2024) · (huggyllama, 2023) · (Ramírez, o. D.) · (Driessen, 2010) · (GitHub, o. D.) · (pytest-dev, o. D.) · (Render, o. D.-a) · (Render, o. D.-b)
 
 Brun, R. (2026a). *DevOps – Umsetzung – Beispiel* [Beispielcode]. Modul AI Operations HS26, FHNW Hochschule für Wirtschaft. Moodle.
 
@@ -88,9 +100,13 @@ Brun, R. (2026d). *Projektaufgabe DevOps – Cloud* [Vorlesungsfolien]. Modul AI
 
 Brun, R. (2026e). *Projektaufgabe DevOps – Lokal* [Vorlesungsfolien]. Modul AI Operations HS26, FHNW Hochschule für Wirtschaft. Moodle.
 
+Driessen, V. (2010, 5. Januar). *A successful Git branching model*. nvie.com. https://nvie.com/posts/a-successful-git-branching-model/
+
 dr3murr. (2023, 11. Juli). *Adjust VRAM/RAM split on Apple Silicon* [Diskussion #2182, ggml-org/llama.cpp]. GitHub. https://github.com/ggml-org/llama.cpp/discussions/2182
 
 ggml-org. (2026). *ggml-common.h* [Quellcode, ggml-org/llama.cpp]. GitHub. Abgerufen am 7. Oktober 2026, von https://github.com/ggml-org/llama.cpp/blob/master/ggml/src/ggml-common.h
+
+GitHub. (o. D.). *Building and testing Python* [GitHub Docs]. Abgerufen am 4. November 2026, von https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python
 
 huggyllama. (2023). *llama-7b* [Modellseite]. Hugging Face. Abgerufen am 7. Oktober 2026, von https://huggingface.co/huggyllama/llama-7b
 
@@ -106,14 +122,20 @@ Meta. (2024d). *Llama-3.3-70B-Instruct* [Modellseite und config.json]. Hugging F
 
 Microsoft. (2024). *phi-4* [Modellseite und config.json]. Hugging Face. Abgerufen am 7. Oktober 2026, von https://huggingface.co/microsoft/phi-4
 
+pytest-dev. (o. D.). *Get Started* [pytest-Dokumentation]. Abgerufen am 4. November 2026, von https://docs.pytest.org/en/stable/getting-started.html
+
 Qwen Team. (2025a). *Qwen3-14B* [Modellseite und config.json]. Hugging Face. Abgerufen am 7. Oktober 2026, von https://huggingface.co/Qwen/Qwen3-14B
 
 Qwen Team. (2025b). *Qwen3-32B* [Modellseite und config.json]. Hugging Face. Abgerufen am 7. Oktober 2026, von https://huggingface.co/Qwen/Qwen3-32B
 
 Qwen Team. (2025c). *Qwen3-8B* [Modellseite und config.json]. Hugging Face. Abgerufen am 7. Oktober 2026, von https://huggingface.co/Qwen/Qwen3-8B
 
-Ramírez, S. (o. D.). *FastAPI – Tutorial – User Guide*. Abgerufen am 7. Oktober 2026, von https://fastapi.tiangolo.com/tutorial/
+Ramírez, S. (o. D.). *FastAPI – Tutorial – User Guide*. Abgerufen am 4. November 2026, von https://fastapi.tiangolo.com/tutorial/ (verwendete Seiten: First Steps, Request Body, Static Files, Testing)
+
+Render. (o. D.-a). *Health checks* [Render Docs]. Abgerufen am 4. November 2026, von https://render.com/docs/health-checks
+
+Render. (o. D.-b). *Setting your Python version* [Render Docs]. Abgerufen am 4. November 2026, von https://render.com/docs/python-version
 
 Schmid, P., Sanseviero, O., Bartolome, A., von Werra, L., Vila, D., Srivastav, V., Sun, M., & Cuenca, P. (2024, 23. Juli). *Llama 3.1 – 405B, 70B & 8B with multilinguality and long context*. Hugging Face. https://huggingface.co/blog/llama31
 
-Hinweise zum Format: Quellen ohne Datum erhalten «o. D.»; bei Webseiten, die sich ändern können, steht das Abrufdatum. Bei mehreren Werken derselben Urheberschaft im gleichen Jahr unterscheiden Buchstaben (a, b, c …) in alphabetischer Reihenfolge der Titel; Titel, die mit einer Zahl beginnen, werden eingeordnet, als wäre die Zahl ausgeschrieben («1.1» → «Eins Punkt Eins», also nach «DevOps …» und vor «Projektaufgabe …»). Die Buchstaben a–e der Brun-Einträge gelten gleich im Erklärungsdokument und im Bericht. Falls die HSW einen eigenen Zitierleitfaden hat, geht dieser vor.
+Hinweise zum Format: Quellen ohne Datum erhalten «o. D.»; bei Webseiten, die sich ändern können, steht das Abrufdatum. Bei mehreren Werken derselben Urheberschaft im gleichen Jahr unterscheiden Buchstaben (a, b, c …) in alphabetischer Reihenfolge der Titel; Titel, die mit einer Zahl beginnen, werden eingeordnet, als wäre die Zahl ausgeschrieben («1.1» → «Eins Punkt Eins», also nach «DevOps …» und vor «Projektaufgabe …»). Mehrere Werke ohne Datum derselben Urheberschaft erhalten «o. D.-a», «o. D.-b». Falls die HSW einen eigenen Zitierleitfaden hat, geht dieser vor.
