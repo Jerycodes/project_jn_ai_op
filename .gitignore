@@ -25,3 +25,6 @@ docs/*.docx
 
 # R-Verlaufsdatei (versehentlich entstanden)
 .Rhistory
+
+# Zwischenspeicher von pytest (entsteht bei jedem Testlauf neu)
+.pytest_cache/
